@@ -1,0 +1,4 @@
+pmtiles:
+	curl -s 'https://overpass-api.de/api/interpreter?data=%5Bout%3Ajson%5D%5Btimeout%3A25%5D%3B%28node%5B%22office%22%3D%22government%22%5D%5B%22government%22%3D%22agency%22%5D%5B%22name%22~%22JICA%22%5D%3Bway%5B%22office%22%3D%22government%22%5D%5B%22government%22%3D%22agency%22%5D%5B%22name%22~%22JICA%22%5D%3Brelation%5B%22office%22%3D%22government%22%5D%5B%22government%22%3D%22agency%22%5D%5B%22name%22~%22JICA%22%5D%3B%29%3Bout%20body%3B%3E%3Bout%20skel%20qt%3B' \
+	| jq -c '.elements[] | select(.type=="node") | {type: "Feature", geometry: {type: "Point", coordinates: [.lon, .lat]}, properties: .tags} // empty' \
+	| tippecanoe -o docs/jica.pmtiles --force --minimum-zoom=0 --maximum-zoom=14 --layer=jica
